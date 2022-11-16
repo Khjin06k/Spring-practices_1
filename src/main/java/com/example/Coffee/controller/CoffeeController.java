@@ -36,7 +36,7 @@ public class CoffeeController {
 
     //단일 커피 조회
     @GetMapping("/{coffee-id}")
-    public ResponseEntity getCoffee(@PathVariable("coffee-id") long coffeeId){
+    public ResponseEntity getCoffee(@PathVariable("coffee-id") @Positive long coffeeId){
         System.out.println("# coffeeId : " + coffeeId);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -52,7 +52,7 @@ public class CoffeeController {
 
     //커피 정보 삭제
     @DeleteMapping("/{coffee-id}")
-    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") long coffeeId) {
+    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") @Positive long coffeeId) {
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

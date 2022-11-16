@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-Id") @Min(1) long memberId,
+    public ResponseEntity patchMember(@PathVariable("member-Id") @Positive long memberId,
                                       @RequestBody @Valid MemberPatchDto memberPatchDto){
 
         memberPatchDto.setMemberId(memberId);
@@ -40,7 +41,7 @@ public class MemberController {
 
     //회원 조회
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") long memberId){
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
         System.out.println("# memberId : " + memberId);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -54,7 +55,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") long memberId){
+    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId){
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
