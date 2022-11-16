@@ -1,52 +1,37 @@
 package com.example.Coffee.controller;
 
+import com.example.Coffee.dto.CoffeePatchDto;
+import com.example.Coffee.dto.CoffeePostDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1/coffees")
+@Valid
 public class CoffeeController {
-    private final Map<Long, Map<String, Object>> coffees = new HashMap<>();
-    @PostConstruct
-    public void init(){
-        Map<String, Object> coffee1 = new HashMap<>();
-        long coffeeId = 1L;
-        coffee1.put("korName", "바닐라 라떼");
-        coffee1.put("engName", "Vanilla Latte");
-        coffee1.put("price", 4500);
-
-        coffees.put(coffeeId, coffee1);
-    }
     //커피 주문
     @PostMapping
-    public ResponseEntity postCoffee(@RequestParam("engName") String engName,
-                                     @RequestParam("korName") String korName,
-                                     @RequestParam("price") int price){
+    public ResponseEntity postCoffee(@RequestBody @Valid CoffeePostDto coffeePostDto){
 
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("engName", engName);
-        map.put("korName", korName);
-        map.put("price", price);
-
-        return new ResponseEntity<>(map, HttpStatus.CREATED);
+        return new ResponseEntity<>(coffeePostDto, HttpStatus.CREATED);
      }
 
      //커피 정보 수정
      @PatchMapping("/{coffee-id}")
-     public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
-                                       @RequestParam("korName") String korName,
-                                       @RequestParam("price") int price){
-        Map<String, Object> map = coffees.get(coffeeId);
-        map.put("korName", korName);
-        map.put("price", price);
+     public ResponseEntity patchCoffee(@PathVariable("coffee-id") @Positive long coffeeId,
+                                       @RequestBody @Valid CoffeePatchDto coffeePatchDto){
+        coffeePatchDto.setCoffeeId(coffeeId);
+        coffeePatchDto.setPrice(6000);
 
-        return new ResponseEntity(map, HttpStatus.OK);
+        return new ResponseEntity<>(coffeePatchDto, HttpStatus.OK);
      }
 
     //단일 커피 조회
@@ -68,7 +53,7 @@ public class CoffeeController {
     //커피 정보 삭제
     @DeleteMapping("/{coffee-id}")
     public ResponseEntity deleteCoffee(@PathVariable("coffee-id") long coffeeId) {
-        coffees.remove(coffeeId);
+
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

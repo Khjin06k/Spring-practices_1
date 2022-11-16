@@ -1,37 +1,42 @@
 package com.example.Order.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/order")
+@Valid
 public class OrderController {
     //주문 등록
     @PostMapping
-    public String postOrder(@RequestParam("memberId") long memberId,
+    public ResponseEntity postOrder(@RequestParam("memberId") @Valid long memberId,
                             @RequestParam("coffeeId") long coffeeId){
-        System.out.println("# memberId : " + memberId);
-        System.out.println("# coffeeId : " + coffeeId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("coffeeId", coffeeId);
 
-        String response = "{\"memberId" + "\" : \"" + memberId +
-                "\", \" coffeeId \" : " + coffeeId + "\"}" ;
-
-        return response;
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 
     //단일 주문 조회
     @GetMapping("/{order-Id}")
-    public String getOrder(@PathVariable("order-Id") long orderId){
+    public ResponseEntity getOrder(@PathVariable("order-Id") @Valid long orderId){
         System.out.println("# orderId : " + orderId);
 
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //모든 주문 조회
     @GetMapping
-    public String getOrders() {
+    public ResponseEntity getOrders() {
         System.out.println("# get Orders");
 
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
