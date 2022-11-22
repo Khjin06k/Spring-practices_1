@@ -22,6 +22,7 @@ public class CoffeeController {
     private final CoffeeService coffeeService;
     private final CoffeeMapper mapper;
 
+    //의존성 주입
     public CoffeeController(CoffeeService coffeeService, CoffeeMapper mapper) {
         this.coffeeService = coffeeService;
         this.mapper = mapper;

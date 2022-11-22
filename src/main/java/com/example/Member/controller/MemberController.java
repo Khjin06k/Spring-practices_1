@@ -30,6 +30,8 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
 
+
+    //의존성 주입
     public MemberController(MemberService memberService, MemberMapper mapper) {
         this.memberService = memberService;
         this.mapper = mapper;
