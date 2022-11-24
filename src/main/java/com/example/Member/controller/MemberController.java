@@ -6,11 +6,14 @@ import com.example.Member.dto.MemberResponseDto;
 import com.example.Member.entity.Member;
 import com.example.Member.mapper.MemberMapper;
 import com.example.Member.service.MemberService;
-import org.apache.coyote.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/v1/members")
 @Valid
+@Slf4j
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
@@ -87,5 +91,12 @@ public class MemberController {
         memberService.deleteMember(memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handlerException(MethodArgumentNotValidException e){
+        final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+
+        return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
     }
 }
