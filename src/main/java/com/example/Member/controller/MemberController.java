@@ -6,6 +6,7 @@ import com.example.Member.dto.MemberResponseDto;
 import com.example.Member.entity.Member;
 import com.example.Member.mapper.MemberMapper;
 import com.example.Member.service.MemberService;
+import com.example.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
@@ -93,10 +95,24 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler //회원 등록 과정에서 Request Body 유효성 검증에 실패했을 때
     public ResponseEntity handlerException(MethodArgumentNotValidException e){
-        final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors(); //발생한 에러 정보를 확인 후 Response Body로 전달
 
-        return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
+        List<ErrorResponse.FieldError> errors =
+                fieldErrors.stream()
+                        .map(error -> new ErrorResponse.FieldError(
+                                error.getField(),
+                                error.getRejectedValue(),
+                                error.getDefaultMessage()))
+                        .collect(Collectors.toList());
+
+        return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handlerException(ConstraintViolationException e){
+        //위와 같이 getBindingResult.getFieldErrors로 에러 정보를 얻을 수 없음.
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }
