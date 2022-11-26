@@ -95,24 +95,5 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ExceptionHandler //회원 등록 과정에서 Request Body 유효성 검증에 실패했을 때
-    public ResponseEntity handlerException(MethodArgumentNotValidException e){
-        final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors(); //발생한 에러 정보를 확인 후 Response Body로 전달
 
-        List<ErrorResponse.FieldError> errors =
-                fieldErrors.stream()
-                        .map(error -> new ErrorResponse.FieldError(
-                                error.getField(),
-                                error.getRejectedValue(),
-                                error.getDefaultMessage()))
-                        .collect(Collectors.toList());
-
-        return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity handlerException(ConstraintViolationException e){
-        //위와 같이 getBindingResult.getFieldErrors로 에러 정보를 얻을 수 없음.
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-    }
 }
