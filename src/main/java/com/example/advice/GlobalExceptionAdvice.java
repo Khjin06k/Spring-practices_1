@@ -1,5 +1,6 @@
 package com.example.advice;
 
+import com.example.exception.BusinessLogicException;
 import com.example.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,13 @@ public class GlobalExceptionAdvice {
         final ErrorResponse response = ErrorResponse.of(e.getConstraintViolations());
 
         return response;
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handleBusinessLogicException(BusinessLogicException e){
+        System.out.println(e.getExceptionCode().getStatus());
+        System.out.println(e.getMessage());
+
+        return new ResponseEntity<>(HttpStatus.valueOf(e.getExceptionCode().getStatus()));
     }
 }
