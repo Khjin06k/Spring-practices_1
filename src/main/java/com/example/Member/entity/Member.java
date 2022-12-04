@@ -50,8 +50,12 @@ public class Member {
     //name : 클래스 필드명과 다른 이름으로 칼럼 생성 진행
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member") //일대다 매핑 진행, mappedBy에 들어갈 단어는 외래키이며 다에 해당하는 객체인지 확인
     private List<Order> orders = new ArrayList<>();
+
+    public void addOrder(Order order){
+        orders.add(order);
+    }
 
     @Transient
     // 테이블 칼럼과 매핑하지 않겠다는 의미로 JPA 가 인식
