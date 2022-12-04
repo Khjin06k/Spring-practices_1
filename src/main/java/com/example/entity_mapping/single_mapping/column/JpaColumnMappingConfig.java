@@ -18,7 +18,7 @@ public class JpaColumnMappingConfig {
         this.tx = em.getTransaction();
 
         return args -> {
-            testEmailNotNull();
+            //testEmailNotNull();
             //testEmailUpdatable();
             //testEmailUnique();
         };

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Member {
 
     @Id //기본키 직접 할당 (자동 생성도 존재)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
 
     public Member(Long memberId){
