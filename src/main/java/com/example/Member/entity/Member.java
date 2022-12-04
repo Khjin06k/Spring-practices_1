@@ -1,5 +1,6 @@
 package com.example.Member.entity;
 
+import com.example.Order.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -46,6 +49,9 @@ public class Member {
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
     //name : 클래스 필드명과 다른 이름으로 칼럼 생성 진행
     private LocalDateTime modifiedAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
 
     @Transient
     // 테이블 칼럼과 매핑하지 않겠다는 의미로 JPA 가 인식
