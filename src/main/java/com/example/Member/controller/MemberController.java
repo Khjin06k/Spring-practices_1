@@ -6,25 +6,15 @@ import com.example.Member.dto.MemberResponseDto;
 import com.example.Member.entity.Member;
 import com.example.Member.mapper.MemberMapper;
 import com.example.Member.service.MemberService;
-import com.example.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Response;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -74,8 +64,11 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity getMembers(){
-        List<Member> members = memberService.findMembers();
+    public ResponseEntity getMembers(@Positive @RequestParam int page,
+                                     @Positive @RequestParam int size){
+
+        Page<Member> pageOrders = memberService.findMembers(page - 1, size);
+        List<Member> members = pageOrders.getContent();
 
         List<MemberResponseDto> response =
                 members.stream()
@@ -84,6 +77,7 @@ public class MemberController {
 
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{member-id}")

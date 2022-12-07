@@ -46,9 +46,8 @@ public class Member {
     private List<Order> orders = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false
-    )
-    private Member.MemberStatus memberStatus = Member.MemberStatus.MEMBER_ACTIVE;
+    @Column(length = 20, nullable = false)
+    private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
     public enum MemberStatus {
         MEMBER_ACTIVE("활동중"),
         MEMBER_SLEEP("활동 종료"),
@@ -58,6 +57,13 @@ public class Member {
 
         MemberStatus(String staus) {
             this.staus = staus;
+        }
+    }
+
+    public void setOrder(Order order) {
+        orders.add(order);
+        if (order.getMember() != this) {
+            order.setMember(this);
         }
     }
 
