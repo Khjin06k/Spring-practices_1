@@ -6,6 +6,8 @@ import com.example.Coffee.dto.CoffeeResponseDto;
 import com.example.Coffee.entity.Coffee;
 import com.example.Coffee.mapper.CoffeeMapper;
 import com.example.Coffee.service.CoffeeService;
+import com.example.Member.entity.Member;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,8 +60,10 @@ public class CoffeeController {
 
     //모든 커피 조회
     @GetMapping
-    public ResponseEntity getCoffees(){
-        List<Coffee> coffees = coffeeService.findCoffees();
+    public ResponseEntity getCoffees(@Positive @RequestParam int page,
+                                     @Positive @RequestParam int size){
+        Page<Coffee> pageOrders = coffeeService.findCoffees(page - 1, size);
+        List<Coffee> coffees = pageOrders.getContent();
 
         List<CoffeeResponseDto> response = coffees.stream()
                 .map(coffee -> mapper.CoffeeToCoffeeResponseDto(coffee))
