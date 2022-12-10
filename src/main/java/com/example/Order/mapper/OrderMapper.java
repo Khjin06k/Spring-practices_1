@@ -12,5 +12,7 @@ import java.util.List;
 public interface OrderMapper {
     Order orderPostDtoToOrder(OrderPostDto orderPostDto);
     Order orderPatchDtoToOrder(OrderPatchDto orderPatchDto);
+
+    Order orderToOrderResponseDto(Order order);
     List<OrderResponseDto> orderToOrderResponseDtos(List<Order> orders);
 }
