@@ -5,6 +5,7 @@ import com.example.Order.entity.Order;
 import com.example.Order.repository.OrderRepository;
 import com.example.exception.BusinessLogicException;
 import com.example.exception.ExceptionCode;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class OrderService {
         Order findOrder = findVerifiedOrder(order.getOrderId());
 
         Optional.ofNullable(order.getOrderStatus())
-                .ifPresent(orderStatus -> findOrder.setOrderStatus());
+                .ifPresent(orderStatus -> findOrder.setOrderStatus(orderStatus));
 
         findOrder.setModifiedAt(LocalDateTime.now());
         return orderRepository.save(findOrder);
@@ -41,7 +42,7 @@ public class OrderService {
         return findVerifiedOrder(orderId);
     }
 
-    public Order findOrders(int page, int size){
+    public Page<Order> findOrders(int page, int size){
         return orderRepository.findAll(PageRequest.of(page, size,
                 Sort.by("orderId").descending()));
     }
