@@ -1,5 +1,6 @@
 package com.example.Coffee.dto;
 
+import com.example.Member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,4 +11,5 @@ public class CoffeeResponseDto {
     private String engName;
     private String korName;
     private int price;
+
 }

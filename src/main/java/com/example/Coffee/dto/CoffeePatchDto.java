@@ -1,5 +1,6 @@
 package com.example.Coffee.dto;
 
+import com.example.Coffee.entity.Coffee;
 import com.example.NotSpace;
 import org.hibernate.validator.constraints.Range;
 
@@ -13,6 +14,7 @@ public class CoffeePatchDto {
     private String korName;
     @Range(min = 100, max = 50000)
     private int price;
+    private Coffee.CoffeeStatus coffeeStatus;
 
     public long getCoffeeId() {
         return coffeeId;
